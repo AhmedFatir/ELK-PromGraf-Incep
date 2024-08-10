@@ -1,0 +1,64 @@
+version: "3.8"
+
+volumes:
+  mariadb:
+    name: mariadb
+  wordpress:
+    name: wordpress
+
+networks:
+  inception:
+    name: inception
+
+services:
+  # mariadb
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    build: ./mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "mariadb", "3306"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+  # nginx
+  nginx:
+    image: nginx
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
+      - ./nginx/conf/access.log:/var/log/nginx/access.log
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
+
+  # wordpress
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    build: ./wordpress
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - wordpress:/var/www/wordpress
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always

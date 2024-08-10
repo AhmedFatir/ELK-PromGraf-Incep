@@ -1,0 +1,111 @@
+version: '3.8'
+
+volumes:
+  prometheus_data:
+    name: prometheus_data
+  grafana_data:
+    name: grafana_data
+
+networks:
+  prom-graf:
+    name: prom-graf
+  inception:
+    external: true
+  elk-stack:
+    external: true
+
+services:
+  # prometheus
+  prometheus:
+    image: prometheus
+    build: ./prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+      - "9093:9093"
+    env_file:
+      - .env
+    volumes:
+      - prometheus_data:/var/lib/prometheus
+      - ./prometheus/prom-config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prom-config/web-config.yml:/etc/prometheus/web-config.yml
+      - ./prometheus/prom-config/alert_rules.yml:/etc/prometheus/alert_rules.yml
+      - ./prometheus/alert-config/web-config.yml:/etc/alertmanager/web-config.yml
+    networks:
+      - inception
+      - prom-graf
+      - elk-stack
+
+  # grafana
+  grafana:
+    image: grafana
+    build: ./grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/config/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/etc/grafana/dashboards
+    networks:
+      - inception
+      - prom-graf
+      - elk-stack
+
+  # cadvisor
+  cadvisor:
+    image: cadvisor
+    build:
+      dockerfile: ./exporters/Dockerfile.cadvisor
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - inception
+      - prom-graf
+      - elk-stack
+
+  # mysqld exporter for MariaDB
+  mysqld_exporter:
+    image: mysqld-exporter
+    build:
+      dockerfile: ./exporters/Dockerfile.mysqld
+    container_name: mysqld-exporter
+    command:
+      - --config.my-cnf=/etc/.my.cnf
+      - --mysqld.address=mariadb:3306
+    volumes:
+      - ./.my.cnf:/etc/.my.cnf
+    networks:
+      - inception
+      - prom-graf
+      - elk-stack
+
+  # nginx exporter for Nginx
+  nginx_exporter:
+    image: nginx-exporter
+    build:
+      dockerfile: ./exporters/Dockerfile.nginx
+    container_name: nginx-exporter
+    command: -nginx.scrape-uri https://nginx:443/nginx_status
+    networks:
+      - inception
+      - prom-graf
+      - elk-stack
+
+  # php-fpm exporter for WordPress
+  php_fpm_exporter:
+    image: php-fpm-exporter
+    build:
+      dockerfile: ./exporters/Dockerfile.php-fpm
+    container_name: php-fpm-exporter
+    environment:
+      FPM_SCRAPE_URI: tcp://wordpress:9000/status
+    networks:
+      - inception
+      - prom-graf
+      - elk-stack

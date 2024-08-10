@@ -1,0 +1,89 @@
+version: '3.8'
+
+volumes:
+  certs:
+    name: certs
+  elasticsearch:
+    name: elasticsearch
+  kibana:
+    name: kibana
+
+networks:
+  elk-stack:
+    name: elk-stack
+
+services:
+  setup:
+    image: setup
+    build: ./setup
+    container_name: setup
+    volumes:
+      - certs:/usr/share/elasticsearch/config/certs
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
+    networks:
+      - elk-stack
+    healthcheck:
+      test: ['CMD-SHELL', '[ -f /usr/share/elasticsearch/config/certs/elasticsearch/elasticsearch.crt ]']
+      interval: 1s
+      timeout: 5s
+      retries: 120
+
+  elasticsearch:
+    image: elasticsearch
+    build: ./elasticsearch
+    container_name: elasticsearch
+    depends_on:
+      setup:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - certs:/usr/share/elasticsearch/config/certs
+      - elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+    env_file:
+      - .env
+    networks:
+      - elk-stack
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  kibana:
+    image: kibana
+    build: ./kibana
+    container_name: kibana
+    depends_on:
+      setup:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - certs:/usr/share/kibana/config/certs
+      - kibana:/usr/share/kibana/data
+    ports:
+      - '5601:5601'
+    env_file:
+      - .env
+    networks:
+      - elk-stack
+    mem_limit: ${MEM_LIMIT}
+
+  logstash:
+    image: logstash
+    build: ./logstash
+    container_name: logstash
+    depends_on:
+      setup:
+        condition: service_healthy
+    restart: always
+    volumes:
+      - certs:/usr/share/logstash/certs
+      - ../inception/nginx/conf/access.log:/usr/share/logstash/nginx/access.log
+    env_file:
+      - .env
+    networks:
+      - elk-stack
