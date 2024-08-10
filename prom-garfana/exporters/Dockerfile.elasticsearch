@@ -1,0 +1,5 @@
+FROM quay.io/prometheuscommunity/elasticsearch-exporter:latest
+
+EXPOSE 9114
+
+ENTRYPOINT [ "/bin/elasticsearch_exporter" ]

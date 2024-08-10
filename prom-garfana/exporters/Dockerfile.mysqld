@@ -3,7 +3,9 @@ FROM prom/mysqld-exporter
 # ARG USER=USER
 # ARG PASS=PASS
 # USER root
-# RUN echo "[client]\nuser=USER\npassword=PASS" > /etc/.my.cnf
+# RUN echo "[client]\nuser=root\npassword=0000" > /etc/.my.cnf
+
+# RUN chown nobody /etc/.my.cnf
 # RUN sed -i '' "s#USER#root#g" /etc/.my.cnf && \
 #     sed -i '' "s#PASS#0000#g" /etc/.my.cnf
 # USER nobody

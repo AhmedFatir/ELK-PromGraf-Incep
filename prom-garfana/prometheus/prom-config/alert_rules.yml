@@ -1,6 +1,4 @@
 groups:
-  - name: service-and-exporter-alerts
-    rules:
   - name: all-instances-alerts
     rules:
       # Alert if any monitored exporter is down

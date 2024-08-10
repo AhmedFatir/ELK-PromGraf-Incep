@@ -15,7 +15,6 @@ envsubst < /etc/alertmanager/alertmanager.yml.tpl > /etc/alertmanager/alertmanag
   --config.file=/etc/alertmanager/alertmanager.yml \
   --storage.path=/var/lib/alertmanager \
   --web.listen-address=:9093 \
-  --web.external-url=https://localhost:9093 \
   --web.config.file=/etc/alertmanager/web-config.yml &
 
 # Wait for all background jobs to finish

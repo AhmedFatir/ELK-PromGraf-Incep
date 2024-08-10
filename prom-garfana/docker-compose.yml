@@ -32,8 +32,8 @@ services:
       - ./prometheus/prom-config/alert_rules.yml:/etc/prometheus/alert_rules.yml
       - ./prometheus/alert-config/web-config.yml:/etc/alertmanager/web-config.yml
     networks:
-      - inception
       - prom-graf
+      - inception
       - elk-stack
 
   # grafana
@@ -43,14 +43,16 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
       - ./grafana/config/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/etc/grafana/dashboards
     networks:
-      - inception
       - prom-graf
+      - inception
       - elk-stack
 
   # cadvisor
@@ -65,8 +67,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
-      - inception
       - prom-graf
+      - inception
       - elk-stack
 
   # mysqld exporter for MariaDB
@@ -81,8 +83,8 @@ services:
     volumes:
       - ./.my.cnf:/etc/.my.cnf
     networks:
-      - inception
       - prom-graf
+      - inception
       - elk-stack
 
   # nginx exporter for Nginx
@@ -93,8 +95,8 @@ services:
     container_name: nginx-exporter
     command: -nginx.scrape-uri https://nginx:443/nginx_status
     networks:
-      - inception
       - prom-graf
+      - inception
       - elk-stack
 
   # php-fpm exporter for WordPress
@@ -106,6 +108,21 @@ services:
     environment:
       FPM_SCRAPE_URI: tcp://wordpress:9000/status
     networks:
-      - inception
       - prom-graf
+      - inception
+      - elk-stack
+
+  # elasticsearch exporter for Elasticsearch
+  elasticsearch_exporter:
+    image: elasticsearch-exporter
+    build:
+      dockerfile: ./exporters/Dockerfile.elasticsearch
+    container_name: elasticsearch-exporter
+    command:
+      - '--es.uri=https://elasticsearch:9200'
+      - '--es.ssl-skip-verify'
+      - '--es.all'
+    networks:
+      - prom-graf
+      - inception
       - elk-stack
