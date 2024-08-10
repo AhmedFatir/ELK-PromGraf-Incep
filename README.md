@@ -25,12 +25,12 @@ git clone https://github.com/AhmedFatir/ELK-PromGraf-Incep.git
 cd ./ELK-PromGraf-Incep && make
 
 # And then you can access:
-Kibana: https://localhost:5601/
+Kibana        https://localhost:5601/
 ElasticSearch https://localhost:9200/
-Grafana: https://localhost:3000/
-Prometheus: https://localhost:9090/
-AlertManager: https://localhost:9093/
-WordPress: https://localhost:443/
+Grafana       https://localhost:3000/
+Prometheus    https://localhost:9090/
+AlertManager  https://localhost:9093/
+WordPress     https://localhost:443/
 ```
 ## if you are a 42 student and want to run this project on the school's Mac, you may need to change the path where Docker Desktop on Mac stores its data.
 ```bash
