@@ -1,8 +1,8 @@
 
-# ELK-PromGram-Incep
+# ELK-PromGraf-Incep
 
 ## Project Overview
-ELK-Stack (Elasticsearch, Logstash, and Grafana) + PromGraf (Prometheus, Alertanager, Grafana, and Exporters) + Iception (MriaDb, Nginx, and WordPress)
+ELK (Elasticsearch, Logstash, and Grafana) + PromGraf (Prometheus, Alertanager, Grafana, and Exporters) + Iception (MriaDb, Nginx, and WordPress)
 ## Installation
 
 ### if you don't have docker and docker-compose on your machine
