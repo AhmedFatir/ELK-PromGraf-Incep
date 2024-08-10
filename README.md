@@ -2,7 +2,10 @@
 # ELK-PromGraf-Incep
 
 ## Project Overview
-[ELK (Elasticsearch, Logstash, and Grafana)](https://github.com/AhmedFatir/ELK-Stack) + [PromGraf (Prometheus, Alertanager, Grafana, and Exporters)](https://github.com/AhmedFatir/Prom-Garfana) + [Iception (MriaDb, Nginx, and WordPress)](https://github.com/AhmedFatir/inception)
+#### [ELK](https://github.com/AhmedFatir/ELK-Stack) (Elasticsearch, Logstash, and Grafana)
+#### [PromGraf](https://github.com/AhmedFatir/Prom-Garfana) (Prometheus, Alertanager, Grafana, and Exporters)
+#### [Iception](https://github.com/AhmedFatir/inception) (MriaDb, Nginx, and WordPress)
+
 ## Installation
 
 ### if you don't have docker and docker-compose on your machine
