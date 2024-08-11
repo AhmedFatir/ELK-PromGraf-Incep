@@ -4,7 +4,7 @@
 ## Project Overview
 #### [ELK](https://github.com/AhmedFatir/ELK-Stack) (Elasticsearch, Logstash, and Grafana)
 #### [PromGraf](https://github.com/AhmedFatir/Prom-Garfana) (Prometheus, Alertanager, Grafana, and Exporters)
-#### [Iception](https://github.com/AhmedFatir/inception) (MriaDb, Nginx, and WordPress)
+#### [Inception](https://github.com/AhmedFatir/inception) (MriaDb, Nginx, and WordPress)
 
 ## Installation
 
