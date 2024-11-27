@@ -43,7 +43,7 @@ WordPress     https://localhost:443/
 rsync -a ~/Library/Containers/com.docker.docker ~/goinfre/DockerData
 
 # Rename the original directory as a backup, just in case you need to revert(optional).
-mv ~/Library/Containers/com.docker.docker ~/Library/Containers/com.docker.docker.backup∏∏π◊
+mv ~/Library/Containers/com.docker.docker ~/Library/Containers/com.docker.docker.backup
 
 # Create a symbolic link from the new location back to the original location.
 ln -s ~/goinfre/DockerData/com.docker.docker ~/Library/Containers/com.docker.docker
