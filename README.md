@@ -2,7 +2,7 @@
 # ELK-PromGraf-Incep
 
 ## Project Overview
-#### [ELK](https://github.com/AhmedFatir/ELK-Stack) (Elasticsearch, Logstash, and Grafana)
+#### [ELK](https://github.com/AhmedFatir/ELK-Stack) (Elasticsearch, Logstash, and Kibana)
 #### [PromGraf](https://github.com/AhmedFatir/Prom-Garfana) (Prometheus, Alertanager, Grafana, and Exporters)
 #### [Inception](https://github.com/AhmedFatir/inception) (MriaDb, Nginx, and WordPress)
 
